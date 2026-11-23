@@ -10,9 +10,19 @@ const UKURAN = 8;
 let papan = [];
 let skor = 0;
 let balokTersedia = [];
-let indeksDipilih = null;
+let indeksSedangDitarik = null;
 
-// Menggunakan angka biasa agar aman dan tidak terpotong
+// Daftar pilihan warna cerah untuk balok
+const DAFTAR_WARNA = [
+    "#f38ba8", // Merah muda
+    "#fab387", // Oranye
+    "#f9e2af", // Kuning
+    "#a6e3a1", // Hijau
+    "#89b4fa", // Biru
+    "#cba6f7"  // Ungu
+];
+
+// Daftar bentuk balok
 const DAFTAR_BENTUK = [
     [[1]],
     [[1, 1]],
@@ -23,12 +33,12 @@ const DAFTAR_BENTUK = [
     [[1, 0], [1, 0], [1, 1]]
 ];
 
-
 function mulaiGame() {
     papan = [];
     for (let b = 0; b < UKURAN; b++) {
         let baris = [];
         for (let k = 0; k < UKURAN; k++) {
+            // 0 artinya kosong, selain 0 berisi kode warna
             baris.push(0);
         }
         papan.push(baris);
@@ -43,10 +53,14 @@ function mulaiGame() {
 function buatBalokBaru() {
     balokTersedia = [];
     for (let i = 0; i < 3; i++) {
-        let acak = Math.floor(Math.random() * DAFTAR_BENTUK.length);
-        balokTersedia.push(DAFTAR_BENTUK[acak]);
+        let acakBentuk = Math.floor(Math.random() * DAFTAR_BENTUK.length);
+        let acakWarna = Math.floor(Math.random() * DAFTAR_WARNA.length);
+        
+        balokTersedia.push({
+            bentuk: DAFTAR_BENTUK[acakBentuk],
+            warna: DAFTAR_WARNA[acakWarna]
+        });
     }
-    indeksDipilih = 0;
     gambarPilihanBalok();
     cekGameOver();
 }
@@ -57,12 +71,24 @@ function gambarPapan() {
         for (let k = 0; k < UKURAN; k++) {
             const sel = document.createElement("div");
             sel.classList.add("sel");
-            if (papan[b][k] === 1) {
-                sel.classList.add("terisi");
+            
+            // Jika kotak berisi kode warna, tampilkan warnanya
+            if (papan[b][k] !== 0) {
+                sel.style.backgroundColor = papan[b][k];
             }
-            sel.addEventListener("click", function() {
-                letakkanBalok(b, k);
+
+            // Izinkan balok dijatuhkan (drop) di atas kotak ini
+            sel.addEventListener("dragover", function(event) {
+                event.preventDefault();
             });
+
+            sel.addEventListener("drop", function(event) {
+                event.preventDefault();
+                if (indeksSedangDitarik !== null) {
+                    letakkanBalok(b, k, indeksSedangDitarik);
+                }
+            });
+
             papanEl.appendChild(sel);
         }
     }
@@ -71,14 +97,25 @@ function gambarPapan() {
 function gambarPilihanBalok() {
     pilihanEl.innerHTML = "";
     for (let i = 0; i < balokTersedia.length; i++) {
-        const bentuk = balokTersedia[i];
-        if (bentuk === null) continue;
+        const item = balokTersedia[i];
+        if (item === null) continue;
+
+        const bentuk = item.bentuk;
+        const warna = item.warna;
 
         const wadah = document.createElement("div");
         wadah.classList.add("wadah-bentuk");
-        if (i === indeksDipilih) {
-            wadah.classList.add("dipilih");
-        }
+        
+        // Aktifkan fitur drag pada balok
+        wadah.setAttribute("draggable", "true");
+
+        wadah.addEventListener("dragstart", function() {
+            indeksSedangDitarik = i;
+        });
+
+        wadah.addEventListener("dragend", function() {
+            indeksSedangDitarik = null;
+        });
 
         let jumlahKolom = bentuk[0].length;
         wadah.style.gridTemplateColumns = "repeat(" + jumlahKolom + ", 24px)";
@@ -88,16 +125,11 @@ function gambarPilihanBalok() {
                 const kotak = document.createElement("div");
                 kotak.classList.add("kotak-kecil");
                 if (bentuk[b][k] === 1) {
-                    kotak.classList.add("aktif");
+                    kotak.style.backgroundColor = warna;
                 }
                 wadah.appendChild(kotak);
             }
         }
-
-        wadah.addEventListener("click", function() {
-            indeksDipilih = i;
-            gambarPilihanBalok();
-        });
 
         pilihanEl.appendChild(wadah);
     }
@@ -113,7 +145,7 @@ function cekBisaDitaruh(bentuk, barisAwal, kolomAwal) {
                 if (targetBaris >= UKURAN || targetKolom >= UKURAN) {
                     return false;
                 }
-                if (papan[targetBaris][targetKolom] === 1) {
+                if (papan[targetBaris][targetKolom] !== 0) {
                     return false;
                 }
             }
@@ -122,33 +154,24 @@ function cekBisaDitaruh(bentuk, barisAwal, kolomAwal) {
     return true;
 }
 
-function letakkanBalok(barisAwal, kolomAwal) {
-    if (indeksDipilih === null || balokTersedia[indeksDipilih] === null) {
-        return;
-    }
+function letakkanBalok(barisAwal, kolomAwal, indeks) {
+    const item = balokTersedia[indeks];
+    if (item === null) return;
 
-    const bentuk = balokTersedia[indeksDipilih];
+    const bentuk = item.bentuk;
+    const warna = item.warna;
 
     if (cekBisaDitaruh(bentuk, barisAwal, kolomAwal)) {
         for (let b = 0; b < bentuk.length; b++) {
             for (let k = 0; k < bentuk[b].length; k++) {
                 if (bentuk[b][k] === 1) {
-                    papan[barisAwal + b][kolomAwal + k] = 1;
+                    papan[barisAwal + b][kolomAwal + k] = warna;
                     skor += 10;
                 }
             }
         }
 
-        balokTersedia[indeksDipilih] = null;
-        indeksDipilih = null;
-
-        for (let i = 0; i < balokTersedia.length; i++) {
-            if (balokTersedia[i] !== null) {
-                indeksDipilih = i;
-                break;
-            }
-        }
-
+        balokTersedia[indeks] = null;
         cekGarisPenuh();
         skorEl.textContent = skor;
         gambarPapan();
@@ -218,12 +241,12 @@ function cekGameOver() {
     let adaLangkah = false;
 
     for (let i = 0; i < balokTersedia.length; i++) {
-        const bentuk = balokTersedia[i];
-        if (bentuk === null) continue;
+        const item = balokTersedia[i];
+        if (item === null) continue;
 
         for (let b = 0; b < UKURAN; b++) {
             for (let k = 0; k < UKURAN; k++) {
-                if (cekBisaDitaruh(bentuk, b, k)) {
+                if (cekBisaDitaruh(item.bentuk, b, k)) {
                     adaLangkah = true;
                 }
             }

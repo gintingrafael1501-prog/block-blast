@@ -7,6 +7,7 @@ body {
     align-items: center;
     min-height: 100vh;
     margin: 0;
+    user-select: none;
 }
 
 .game-container {
@@ -41,11 +42,6 @@ body {
     height: 42px;
     background-color: #45475a;
     border-radius: 6px;
-    cursor: pointer;
-}
-
-.sel.terisi {
-    background-color: #fab387;
 }
 
 .gameover-overlay {
@@ -86,24 +82,20 @@ body {
     gap: 3px;
     padding: 8px;
     border-radius: 8px;
-    cursor: pointer;
-    border: 2px solid transparent;
+    cursor: grab;
     align-content: center;
+    transition: transform 0.1s;
 }
 
-.wadah-bentuk.dipilih {
-    border: 2px solid #a6e3a1;
-    background-color: #313244;
+.wadah-bentuk:active {
+    cursor: grabbing;
+    transform: scale(1.05);
 }
 
 .kotak-kecil {
     width: 24px;
     height: 24px;
     border-radius: 4px;
-}
-
-.kotak-kecil.aktif {
-    background-color: #89b4fa;
 }
 
 button {
