@@ -2,28 +2,34 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Block Blast</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Block Blast Classic</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="game-container">
-        <h1>Block Blast</h1>
-        <div class="skor-box">Skor: <span id="skor">0</span></div>
-        
-        <div class="area-papan">
-            <div id="papan" class="papan"></div>
+    <div class="wrapper">
+        <div class="header">
+            <div class="best-score">
+                <span>👑</span>
+                <span id="high-score">0</span>
+            </div>
+            <button id="btn-sound" class="icon-btn">🔊</button>
+        </div>
+
+        <div class="current-score" id="score">0</div>
+
+        <div class="canvas-container">
+            <canvas id="gameCanvas"></canvas>
             
-            <!-- Layar Game Over -->
-            <div id="layar-gameover" class="gameover-overlay sembunyi">
-                <h2>GAME OVER!</h2>
-                <p>Skor Akhir: <span id="skor-akhir">0</span></p>
-                <button id="tombol-main-lagi">Main Lagi</button>
+            <div id="gameover-modal" class="modal hidden">
+                <div class="modal-box">
+                    <h2>GAME OVER</h2>
+                    <p class="final-label">SKOR AKHIR</p>
+                    <div id="final-score" class="final-num">0</div>
+                    <button id="btn-restart" class="play-btn">MAIN LAGI</button>
+                </div>
             </div>
         </div>
-        
-        <div id="pilihan-balok" class="pilihan-balok"></div>
-        <button id="tombol-reset">Ulangi Game</button>
     </div>
 
     <script src="script.js"></script>
