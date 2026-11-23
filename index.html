@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Block Blast</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1>Block Blast</h1>
+        <div class="skor-box">Skor: <span id="skor">0</span></div>
+        
+        <div class="area-papan">
+            <div id="papan" class="papan"></div>
+            
+            <!-- Layar Game Over -->
+            <div id="layar-gameover" class="gameover-overlay sembunyi">
+                <h2>GAME OVER!</h2>
+                <p>Skor Akhir: <span id="skor-akhir">0</span></p>
+                <button id="tombol-main-lagi">Main Lagi</button>
+            </div>
+        </div>
+        
+        <div id="pilihan-balok" class="pilihan-balok"></div>
+        <button id="tombol-reset">Ulangi Game</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

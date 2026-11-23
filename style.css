@@ -1,0 +1,122 @@
+body {
+    background-color: #1e1e2e;
+    color: white;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.game-container {
+    text-align: center;
+}
+
+.skor-box {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #f9e2af;
+}
+
+.area-papan {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.papan {
+    display: grid;
+    grid-template-columns: repeat(8, 42px);
+    grid-template-rows: repeat(8, 42px);
+    gap: 4px;
+    background-color: #313244;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.sel {
+    width: 42px;
+    height: 42px;
+    background-color: #45475a;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.sel.terisi {
+    background-color: #fab387;
+}
+
+.gameover-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(17, 17, 27, 0.9);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.gameover-overlay.sembunyi {
+    display: none;
+}
+
+.gameover-overlay h2 {
+    color: #f38ba8;
+    font-size: 32px;
+    margin: 0 0 10px 0;
+}
+
+.pilihan-balok {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    min-height: 100px;
+    margin-bottom: 20px;
+}
+
+.wadah-bentuk {
+    display: grid;
+    gap: 3px;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    align-content: center;
+}
+
+.wadah-bentuk.dipilih {
+    border: 2px solid #a6e3a1;
+    background-color: #313244;
+}
+
+.kotak-kecil {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+}
+
+.kotak-kecil.aktif {
+    background-color: #89b4fa;
+}
+
+button {
+    background-color: #f38ba8;
+    color: #11111b;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.9;
+}
